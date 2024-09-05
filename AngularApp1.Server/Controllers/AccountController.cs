@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace AngularApp1.Server.Controllers
 {
@@ -15,12 +16,22 @@ namespace AngularApp1.Server.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
         private readonly SignInManager<AppUser> _signInManager;
-
+        private Func<string?> GetCurrentUserName;
         public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager)
         {
+            GetCurrentUserName = () => User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
             _userManager = userManager;
             _tokenService = tokenService;
             _signInManager = signInManager;
+        }
+
+        [HttpGet]
+        public IActionResult GetMyName()
+        {
+            var name = GetCurrentUserName();
+            if (name == null)
+                return Unauthorized();
+            return Ok(name);
         }
 
         [HttpPost("login")]

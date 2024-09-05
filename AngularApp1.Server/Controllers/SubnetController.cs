@@ -1,18 +1,24 @@
-﻿using AngularApp1.Server.Interfaces;
+﻿using AngularApp1.Server.Dtos;
+using AngularApp1.Server.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Security.Claims;
+using System.Text;
 
 namespace AngularApp1.Server.Controllers
 {
     [Route("api/subnet")]
     [ApiController]
+    [Authorize]
     public class SubnetController : ControllerBase
     {
         private readonly ISubnetRepository _subnetRepository;
+
+        private Func<string?> GetCurrentUserName;
         public SubnetController(ISubnetRepository subnetRepository)
         {
+            GetCurrentUserName = () => User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
             _subnetRepository = subnetRepository;
         }
 
@@ -47,16 +53,12 @@ namespace AngularApp1.Server.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> getIps(string subnet)
+        public async Task<IActionResult> GetSubnets(bool withOwners = false, bool withIps = false)
         {
             try
             {
-                var ips = await GenerateIPsAsync(subnet);
-                return Ok(ips);
-            }
-            catch (FormatException ex)
-            {
-                return BadRequest(ex.Message);
+                var subnets = await _subnetRepository.GetSubnets(withOwners, withIps);
+                return Ok(subnets.Select(s => new SubnetDto(s)));
             }
             catch (Exception ex)
             {
@@ -64,12 +66,23 @@ namespace AngularApp1.Server.Controllers
             }
         }
 
+        [HttpGet("ips")]
+        public async Task<IActionResult> GetSubnetIps(string subnetString)
+        {
+            var subnet = await _subnetRepository.GetSubnet(subnetString,false, true);
+            if (subnet == null)
+            {
+                return NotFound();
+            }
+            var ips = subnet.IpAddresses.Select(ip => ip.IpAddressString);
+            return File(Encoding.UTF8.GetBytes(string.Join("\n", ips)), "text/plain", $"{subnetString}.txt");
+        }
+
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> CreateSubnet(string subnet)
         {
-            var ownerUserName = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+            var ownerUserName = GetCurrentUserName();
             if (ownerUserName == null)
             {
                 return Unauthorized();

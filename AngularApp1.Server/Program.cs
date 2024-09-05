@@ -12,9 +12,10 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+string connStr = builder.Configuration.GetConnectionString("DefaultConnection");
 
 //Configure Db context
-builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlite("DataSource=app.db"));
+builder.Services.AddDbContext<AppDbContext>(opt => opt.UseMySql(connStr, new MySqlServerVersion(new Version(5, 7, 44))));
 
 //builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<AppDbContext>();
 

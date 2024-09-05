@@ -56,9 +56,43 @@ namespace AngularApp1.Server.Repositories
             return true;
         }
 
-        public List<Subnet> GetSubnets()
+        public async Task<List<Subnet>> GetSubnets(bool withOwners = false, bool withIps = false)
         {
-            return _appContext.Subnets.ToList();
+            IQueryable<Subnet> subnetsBuilder = _appContext.Subnets;
+
+            if (withOwners)
+            {
+                subnetsBuilder = subnetsBuilder.Include(s => s.Owners);
+            }
+
+            if (withIps)
+            {
+                subnetsBuilder = subnetsBuilder.Include(s => s.IpAddresses);
+            }
+
+            return await subnetsBuilder.ToListAsync();
+        }
+
+        public async Task<Subnet?> GetSubnet(string subnetString, bool withOwners = false, bool withIps = false)
+        {
+            var subnetVals = subnetString.Split("/");
+            if (subnetVals.Length != 2 || !int.TryParse(subnetVals[1], out _) || !System.Net.IPAddress.TryParse(subnetVals[0], out _))
+            {
+                return null;
+            }
+            IQueryable<Subnet> subnetBuilder = _appContext.Subnets;
+
+            if (withOwners)
+            {
+                subnetBuilder = subnetBuilder.Include(s => s.Owners);
+            }
+
+            if (withIps)
+            {
+                subnetBuilder = subnetBuilder.Include(s => s.IpAddresses);
+            }
+
+            return await subnetBuilder.FirstOrDefaultAsync(s => s.SubnetCIDR == subnetVals[1] && s.FirstIpAddress == subnetVals[0]);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace AngularApp1.Server.Models
+﻿using System.Text.Json.Serialization;
+
+namespace AngularApp1.Server.Models
 {
     public class Subnet
     {
@@ -6,6 +8,8 @@
         public string SubnetCIDR { get; set; }
         public string FirstIpAddress { get; set; }
         public List<IpAddress> IpAddresses { get; set; }
+
+        [JsonIgnore]
         public List<AppUser> Owners { get; set; }
 
         public Subnet()
