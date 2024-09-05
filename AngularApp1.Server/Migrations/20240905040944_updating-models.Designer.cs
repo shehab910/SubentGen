@@ -3,6 +3,7 @@ using System;
 using AngularApp1.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AngularApp1.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240905040944_updating-models")]
+    partial class updatingmodels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -107,10 +110,6 @@ namespace AngularApp1.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("FirstIpAddress")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("SubnetCIDR")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -163,13 +162,13 @@ namespace AngularApp1.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e8c52fa7-bbb2-403a-b7ad-2d9e6e6a8fd9",
+                            Id = "720716f2-fde6-4b8f-9a29-eccadfec261b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8a4b3247-e9e3-437c-9832-57bf94beb777",
+                            Id = "1f5bea30-d97a-4311-ab5b-b14fb8b063ad",
                             Name = "User",
                             NormalizedName = "USER"
                         });

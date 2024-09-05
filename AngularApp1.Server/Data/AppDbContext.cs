@@ -11,9 +11,14 @@ namespace AngularApp1.Server.Data
         {
             
         }
+
+        public DbSet<Subnet> Subnets { get; set; }
+        public DbSet<IpAddress> IpAddresses { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            
             List<IdentityRole> roles = new List<IdentityRole>
             {
                 new IdentityRole
@@ -28,6 +33,16 @@ namespace AngularApp1.Server.Data
                 },
             };
             builder.Entity<IdentityRole>().HasData(roles);
+
+            builder.Entity<Subnet>()
+                .HasMany(e => e.IpAddresses)
+                .WithOne(e => e.Subnet)
+                .HasForeignKey(e => e.SubnetId)
+                .IsRequired();
+
+            builder.Entity<AppUser>()
+                .HasMany(e => e.Subnets)
+                .WithMany(e => e.Owners);
         }
     }
 }

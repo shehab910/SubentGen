@@ -1,22 +1,17 @@
 using AngularApp1.Server.Data;
 using AngularApp1.Server.Interfaces;
 using AngularApp1.Server.Models;
+using AngularApp1.Server.Repositories;
 using AngularApp1.Server.Services;
-using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-//Authorization
-builder.Services.AddAuthorization();
 
 //Configure Db context
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlite("DataSource=app.db"));
@@ -45,6 +40,7 @@ builder.Services.AddAuthentication(opt =>
 {
     opt.TokenValidationParameters = new TokenValidationParameters
     {
+        ValidateLifetime = true,
         ValidateIssuer = true,
         ValidIssuer = builder.Configuration["JWT:Issuer"],
         ValidateAudience = true,
@@ -54,7 +50,9 @@ builder.Services.AddAuthentication(opt =>
     };
 });
 
+builder.Services.AddAuthorization();
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
@@ -86,6 +84,8 @@ builder.Services.AddSwaggerGen(option =>
 });
 
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
+builder.Services.AddScoped<ISubnetRepository, SubnetRepository>();
+builder.Services.AddScoped<IIpRepository, IpRepository>();
 
 var app = builder.Build();
 

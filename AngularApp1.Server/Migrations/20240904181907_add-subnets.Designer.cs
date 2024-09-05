@@ -3,6 +3,7 @@ using System;
 using AngularApp1.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AngularApp1.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240904181907_add-subnets")]
+    partial class addsubnets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -98,7 +101,7 @@ namespace AngularApp1.Server.Migrations
 
                     b.HasIndex("SubnetId");
 
-                    b.ToTable("IpAddresses");
+                    b.ToTable("IpAddress");
                 });
 
             modelBuilder.Entity("AngularApp1.Server.Models.Subnet", b =>
@@ -107,28 +110,24 @@ namespace AngularApp1.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("FirstIpAddress")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("SubnetCIDR")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subnets");
+                    b.ToTable("Subnet");
                 });
 
             modelBuilder.Entity("AppUserSubnet", b =>
                 {
-                    b.Property<string>("OwnersId")
+                    b.Property<string>("AppUserId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SubnetsId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("OwnersId", "SubnetsId");
+                    b.HasKey("AppUserId", "SubnetsId");
 
                     b.HasIndex("SubnetsId");
 
@@ -163,13 +162,13 @@ namespace AngularApp1.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e8c52fa7-bbb2-403a-b7ad-2d9e6e6a8fd9",
+                            Id = "a317a445-cc97-40e6-94c8-74fcc9479524",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8a4b3247-e9e3-437c-9832-57bf94beb777",
+                            Id = "be3e144c-1ba6-451c-94e0-78519a5e6e5e",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -292,7 +291,7 @@ namespace AngularApp1.Server.Migrations
                 {
                     b.HasOne("AngularApp1.Server.Models.AppUser", null)
                         .WithMany()
-                        .HasForeignKey("OwnersId")
+                        .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
