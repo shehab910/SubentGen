@@ -1,14 +1,16 @@
-﻿:host {
+:host {
     max-width: 1280px;
-    padding: 2rem;
     text-align: center;
 }
 
-th, td {
-    padding-left: 1rem;
-    padding-right: 1rem;
-}
-
-table {
-    margin: 0 auto;
+#app-header {
+  background-color: #673ab7;
+  color: #EFEFEF;
+  font-family: 'Roboto', sans-serif;
+  font-size: xx-large;
+  font-weight: 600;
+  padding-block: 2rem;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
 }

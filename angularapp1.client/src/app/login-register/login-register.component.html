@@ -1,0 +1,38 @@
+<div class="form-container">
+  <h1 class="auth-header">{{ isLoginMode ? 'Login' : 'Register' }}</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" [class.loading]="form.disabled">
+    <mat-form-field appearance="fill">
+      <mat-label>User Name</mat-label>
+      <input matInput formControlName="userName" type="text" placeholder="Enter your username" />
+      <mat-error *ngIf="form.get('userName')?.invalid">Please enter a valid username</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" *ngIf="!isLoginMode">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" placeholder="Enter your email" />
+      <mat-error *ngIf="form.get('email')?.invalid">Please enter a valid email</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" type="password" placeholder="Enter your password" />
+      <mat-error *ngIf="form.get('password')?.invalid">{{ getPasswordErrorMessage("password") }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" *ngIf="!isLoginMode">
+      <mat-label>Confirm Password</mat-label>
+      <input matInput formControlName="confirmPassword" type="password" placeholder="Confirm your password" />
+      <mat-error *ngIf="form.get('confirmPassword')?.invalid">Passwords do not match</mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.disabled">
+      <span *ngIf="form.disabled">Loading...</span>
+      <span *ngIf="!form.disabled">{{ isLoginMode ? 'Login' : 'Register' }}</span>
+    </button>
+
+    <button mat-button type="button" (click)="toggleMode()" [disabled]="form.disabled">
+      {{ isLoginMode ? 'Don\'t Have An Account?' : 'Already Have An Account?' }}
+    </button>
+  </form>
+</div>
