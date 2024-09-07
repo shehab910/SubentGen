@@ -1,3 +1,25 @@
 <app-home-layout class="full-height">
-  <p>home works!</p>
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z1">
+
+      <!--- Note that these columns can be defined in any order.
+      The actual rendered columns are set as a property on the row definition" -->
+      <ng-container matColumnDef="subnet">
+        <th mat-header-cell *matHeaderCellDef> Subnet CIDR </th>
+        <td mat-cell *matCellDef="let element"> {{element.subnet}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="link">
+        <th mat-header-cell *matHeaderCellDef> Download Link </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- Render the button with click event -->
+          <button (click)="clickHandler(element.cidrValue)">Download</button>
+        </td>
+      </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
 </app-home-layout>

@@ -3,9 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginRegisterComponent } from './login-register/login-register.component';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-import { NewSubnetComponent } from './new-subnet/new-subnet.component';
 import { authGuard } from './guards/auth.guard';
 import { loginGuard } from './guards/login.guard';
+import { NewSubnetComponent } from './new-subnet/new-subnet.component';
 
 export const routes: Routes = [
   {

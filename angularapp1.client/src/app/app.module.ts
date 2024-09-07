@@ -19,6 +19,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatIconModule } from "@angular/material/icon";
+import { MatTableModule } from '@angular/material/table';
 import { NewSubnetComponent } from './new-subnet/new-subnet.component';
 
 
@@ -28,7 +29,7 @@ import { NewSubnetComponent } from './new-subnet/new-subnet.component';
     HomeComponent,
     AppComponent,
     HomeLayoutComponent,
-    NewSubnetComponent
+    NewSubnetComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,6 +46,7 @@ import { NewSubnetComponent } from './new-subnet/new-subnet.component';
     MatListModule,
     MatToolbarModule,
     MatIconModule,
+    MatTableModule,
   ],
   providers: [
     {

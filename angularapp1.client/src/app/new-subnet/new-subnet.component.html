@@ -1,3 +1,15 @@
 <app-home-layout class="full-height">
-  <p>new subnet works!</p>
+  <div class="container">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" [class.loading]="form.disabled">
+      <mat-form-field appearance="fill">
+        <mat-label>CIDR Notation</mat-label>
+        <input matInput formControlName="cidr" type="text" placeholder="192.168.1.0/24" />
+        <mat-error *ngIf="form.get('cidr')?.invalid">Please enter a valid CIDR Notation</mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.disabled">
+        <span *ngIf="form.disabled">Loading...</span>
+        <span *ngIf="!form.disabled">Create Subnet</span>
+      </button>
+    </form>
+  </div>
 </app-home-layout>

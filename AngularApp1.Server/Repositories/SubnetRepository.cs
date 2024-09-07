@@ -24,7 +24,11 @@ namespace AngularApp1.Server.Repositories
             var existingSubnet = await _appContext.Subnets.FirstOrDefaultAsync(s => s.FirstIpAddress == subnetAndCidr[0] && s.SubnetCIDR == subnetAndCidr[1]);
             if (existingSubnet != null)
             {
+                //FIXME: Throws error when saving
+                // check if the user already an owner
+                return true;
                 existingSubnet.Owners.Add(user);
+                
                 await _appContext.SaveChangesAsync();
                 return true;
             }
