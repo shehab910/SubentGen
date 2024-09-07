@@ -1,0 +1,10 @@
+mat-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-width: 10rem;
+}
+
+.active {
+  background-color: #f0f0f0;
+}

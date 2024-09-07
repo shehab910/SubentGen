@@ -55,8 +55,6 @@ export class LoginRegisterComponent {
     nextAuth: (value: AuthResponse): void => {
       if (value.token && value.email && value.userName) {
         localStorage.setItem("token", value.token);
-        localStorage.setItem("email", value.email);
-        localStorage.setItem("userName", value.userName);
         this.router.navigate([""]);
       }
     },

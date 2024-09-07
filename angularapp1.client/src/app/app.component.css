@@ -1,6 +1,10 @@
 :host {
-    max-width: 1280px;
+    display: block;
     text-align: center;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 #app-header {
@@ -10,7 +14,7 @@
   font-size: xx-large;
   font-weight: 600;
   padding-block: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
   text-transform: uppercase;
   letter-spacing: 0.2rem;
 }

@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavComponent } from './nav/nav.component';
 import { AuthInterceptor } from './services/auth.interceptor';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginRegisterComponent } from './login-register/login-register.component';
@@ -15,24 +14,37 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HomeComponent } from './home/home.component';
 import { RouterModule } from '@angular/router';
+import { HomeLayoutComponent } from './home-layout/home-layout.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatIconModule } from "@angular/material/icon";
+import { NewSubnetComponent } from './new-subnet/new-subnet.component';
+
 
 @NgModule({
   declarations: [
-    NavComponent,
     LoginRegisterComponent,
     HomeComponent,
-    AppComponent
+    AppComponent,
+    HomeLayoutComponent,
+    NewSubnetComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    //TODO: remove RouterModule
     RouterModule,
     ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
     MatFormFieldModule,
     MatSnackBarModule,
+    MatSidenavModule,
+    MatListModule,
+    MatToolbarModule,
+    MatIconModule,
   ],
   providers: [
     {
