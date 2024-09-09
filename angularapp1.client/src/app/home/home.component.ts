@@ -11,7 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class HomeComponent {
   displayedColumns: string[] = ['subnet', 'link'];
-  dataSource: any = [];
+  dataSource: any = null;
 
   constructor(private subnetService: SubnetService, private snackBar: MatSnackBar) {
     this.subnetService.getSubnets().subscribe(res => {

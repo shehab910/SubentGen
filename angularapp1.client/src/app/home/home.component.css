@@ -2,3 +2,7 @@
     padding: 2rem;
     max-width: 32rem;
 }
+
+mat-spinner {
+    margin-inline: auto;
+}

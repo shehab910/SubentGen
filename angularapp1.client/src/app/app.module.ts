@@ -20,6 +20,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from '@angular/material/table';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NewSubnetComponent } from './new-subnet/new-subnet.component';
 
 
@@ -47,6 +48,7 @@ import { NewSubnetComponent } from './new-subnet/new-subnet.component';
     MatToolbarModule,
     MatIconModule,
     MatTableModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     {
