@@ -53,16 +53,6 @@ namespace AngularApp1.Server.Repositories
                 SubnetId = subnetId
             }).ToList();
 
-            foreach (string ip in stringIps)
-            {
-                IpAddress ipAddress = new IpAddress
-                {
-                    IpAddressString = ip,
-                    SubnetId = subnetId
-                };
-                ips.Add(ipAddress);
-            }
-
             try
             {
                 await _appContext.BulkInsertAsync(ips);
@@ -114,6 +104,22 @@ namespace AngularApp1.Server.Repositories
             }
 
             return await subnetBuilder.FirstOrDefaultAsync(s => s.SubnetCIDR == subnetVals[1] && s.FirstIpAddress == subnetVals[0]);
+        }
+
+        public async Task<List<string>?> GetSubnetIps(string subnetString)
+        {
+            var subnetVals = subnetString.Split("/");
+            if (subnetVals.Length != 2 || !int.TryParse(subnetVals[1], out _) || !System.Net.IPAddress.TryParse(subnetVals[0], out _))
+            {
+                return null;
+            }
+            var subnet = await _appContext.Subnets.Where(s => s.SubnetCIDR == subnetVals[1] && s.FirstIpAddress == subnetVals[0]).FirstOrDefaultAsync();
+            if (subnet == null)
+            {
+                return null;
+            }
+            var ips = await _appContext.IpAddresses.Where(ip => ip.SubnetId == subnet.Id).Select(ip => ip.IpAddressString).ToListAsync();
+            return ips;
         }
     }
 }
