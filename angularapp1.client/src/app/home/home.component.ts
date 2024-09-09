@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { saveAs } from "file-saver";
 import { SubnetService } from '../services/subnet.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -11,7 +13,7 @@ export class HomeComponent {
   displayedColumns: string[] = ['subnet', 'link'];
   dataSource: any = [];
 
-  constructor(private subnetService: SubnetService) {
+  constructor(private subnetService: SubnetService, private snackBar: MatSnackBar) {
     this.subnetService.getSubnets().subscribe(res => {
       this.subnetService.getSubnets().subscribe(res => {
         this.dataSource = res.map(subnet => {
@@ -22,16 +24,10 @@ export class HomeComponent {
     });
   }
 
-  clickHandler(cidr: string) {
-    console.warn("Downloading for CIDR:", cidr);
+  downloadButtonHandler(cidr: string) {
+    this.snackBar.open(`Downloading IPs for ${cidr}`, 'Close', { duration: 2000 });
     this.subnetService.getIps(cidr).subscribe(res => {
-      const url = window.URL.createObjectURL(res);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${cidr}-ips.txt`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
+      saveAs(res, `${cidr}-ips.txt`);
     });
   }
 }
