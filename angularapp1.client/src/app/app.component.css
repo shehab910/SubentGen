@@ -1,10 +1,14 @@
 :host {
     display: block;
     text-align: center;
-    height: 100%;
+    min-height: 100vh;
     width: 100%;
     padding: 0;
     margin: 0;
+}
+
+.app-comp {
+    min-height: 100vh;
 }
 
 #app-header {
@@ -13,8 +17,9 @@
   font-family: 'Roboto', sans-serif;
   font-size: xx-large;
   font-weight: 600;
-  padding-block: 2rem;
   margin-bottom: 0;
   text-transform: uppercase;
   letter-spacing: 0.2rem;
+  padding-block: 4vh;
+  height: 4vh;
 }

@@ -1,4 +1,4 @@
-<app-home-layout class="full-height">
+<app-home-layout>
   <div class="table-container">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z1">
 
@@ -18,8 +18,8 @@
         </td>
       </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
   </div>
 </app-home-layout>

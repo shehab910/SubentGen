@@ -3,8 +3,21 @@ mat-nav-list {
   flex-direction: column;
   gap: 2rem;
   min-width: 10rem;
+  box-sizing: border-box;
+  padding-block: 1rem;
+  height: 100%;
+}
+
+mat-sidenav-container {
+  height: 88vh;
 }
 
 .active {
   background-color: #f0f0f0;
+}
+
+
+#logout-button {
+  border: 0;
+  margin-top: auto;
 }

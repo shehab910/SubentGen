@@ -23,6 +23,10 @@ export class AuthService {
     return this.http.get("/api/account", { responseType: "text" })
   }
 
+  public logout() {
+    localStorage.removeItem("token");
+  }
+
   public isLoggedIn(): boolean {
     return !!localStorage.getItem("token")
   }
