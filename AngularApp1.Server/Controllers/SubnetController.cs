@@ -1,5 +1,6 @@
 ﻿using AngularApp1.Server.Dtos;
 using AngularApp1.Server.Interfaces;
+using AngularApp1.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -69,12 +70,11 @@ namespace AngularApp1.Server.Controllers
         [HttpGet("ips")]
         public async Task<IActionResult> GetSubnetIps(string subnetString)
         {
-            var subnet = await _subnetRepository.GetSubnet(subnetString,false, true);
-            if (subnet == null)
+            var ips = await _subnetRepository.GetSubnetIps(subnetString);
+            if (ips == null)
             {
                 return NotFound();
             }
-            var ips = subnet.IpAddresses.Select(ip => ip.IpAddressString);
             return File(Encoding.UTF8.GetBytes(string.Join("\n", ips)), "text/plain", $"{subnetString}.txt");
         }
 

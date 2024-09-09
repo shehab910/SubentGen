@@ -14,7 +14,7 @@
         <th mat-header-cell *matHeaderCellDef> Download Link </th>
         <td mat-cell *matCellDef="let element">
           <!-- Render the button with click event -->
-          <button (click)="clickHandler(element.cidrValue)">Download</button>
+          <button (click)="downloadButtonHandler(element.cidrValue)">Download</button>
         </td>
       </ng-container>
 
