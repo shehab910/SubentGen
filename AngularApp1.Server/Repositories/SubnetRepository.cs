@@ -23,15 +23,17 @@ namespace AngularApp1.Server.Repositories
             }
             var subnetAndCidr = subnetAddress.Split('/');
 
-            var existingSubnet = await _appContext.Subnets.FirstOrDefaultAsync(s => s.FirstIpAddress == subnetAndCidr[0] && s.SubnetCIDR == subnetAndCidr[1]);
+            var existingSubnet = await _appContext.Subnets.Include(s => s.Owners).FirstOrDefaultAsync(s => s.FirstIpAddress == subnetAndCidr[0] && s.SubnetCIDR == subnetAndCidr[1]);
             if (existingSubnet != null)
             {
                 //FIXME: Throws error when saving
                 // check if the user already an owner
-                return true;
-                existingSubnet.Owners.Add(user);
-
-                await _appContext.SaveChangesAsync();
+                //return true;
+                if (!existingSubnet.Owners.Contains(user))
+                {
+                    existingSubnet.Owners.Add(user);
+                    await _appContext.SaveChangesAsync();
+                }
                 return true;
             }
             Subnet subnet = new Subnet
@@ -66,22 +68,11 @@ namespace AngularApp1.Server.Repositories
 
             return true;
         }
-
-        public async Task<List<Subnet>> GetSubnets(bool withOwners = false, bool withIps = false)
+        public async Task<List<Subnet>> GetUserSubnets(string ownerUserName)
         {
-            IQueryable<Subnet> subnetsBuilder = _appContext.Subnets;
-
-            if (withOwners)
-            {
-                subnetsBuilder = subnetsBuilder.Include(s => s.Owners);
-            }
-
-            if (withIps)
-            {
-                subnetsBuilder = subnetsBuilder.Include(s => s.IpAddresses);
-            }
-
-            return await subnetsBuilder.ToListAsync();
+            return await _appContext.Users
+                .Where(u => u.UserName == ownerUserName)
+                .SelectMany(u => u.Subnets).ToListAsync();
         }
 
         public async Task<Subnet?> GetSubnet(string subnetString, bool withOwners = false, bool withIps = false)

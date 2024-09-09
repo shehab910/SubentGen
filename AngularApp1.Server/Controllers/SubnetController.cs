@@ -54,11 +54,12 @@ namespace AngularApp1.Server.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetSubnets(bool withOwners = false, bool withIps = false)
+        public async Task<IActionResult> GetSubnets()
         {
+            string ownerUserName = GetCurrentUserName()!;
             try
             {
-                var subnets = await _subnetRepository.GetSubnets(withOwners, withIps);
+                var subnets = await _subnetRepository.GetUserSubnets(ownerUserName);
                 return Ok(subnets.Select(s => new SubnetDto(s)));
             }
             catch (Exception ex)
