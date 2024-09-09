@@ -43,6 +43,10 @@ namespace AngularApp1.Server.Data
             builder.Entity<AppUser>()
                 .HasMany(e => e.Subnets)
                 .WithMany(e => e.Owners);
+
+            builder.Entity<AppUser>()
+                .HasIndex(e => e.UserName)
+                .IsUnique();
         }
     }
 }
