@@ -2,6 +2,7 @@
 using AngularApp1.Server.Data;
 using AngularApp1.Server.Interfaces;
 using AngularApp1.Server.Models;
+using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace AngularApp1.Server.Repositories
@@ -16,11 +17,12 @@ namespace AngularApp1.Server.Repositories
         {
             // find user by username
             var user = await _appContext.Users.FirstOrDefaultAsync(u => u.UserName == ownerUserName);
-            if (user == null) {
+            if (user == null)
+            {
                 return false;
             }
             var subnetAndCidr = subnetAddress.Split('/');
-            
+
             var existingSubnet = await _appContext.Subnets.FirstOrDefaultAsync(s => s.FirstIpAddress == subnetAndCidr[0] && s.SubnetCIDR == subnetAndCidr[1]);
             if (existingSubnet != null)
             {
@@ -28,34 +30,49 @@ namespace AngularApp1.Server.Repositories
                 // check if the user already an owner
                 return true;
                 existingSubnet.Owners.Add(user);
-                
+
                 await _appContext.SaveChangesAsync();
                 return true;
             }
+            Subnet subnet = new Subnet
+            {
+                FirstIpAddress = subnetAddress.Split('/')[0],
+                SubnetCIDR = subnetAddress.Split('/')[1],
+                Owners = new List<AppUser> { user }
+            };
+
+            var savedSubnet = await _appContext.AddAsync(subnet);
+            await _appContext.SaveChangesAsync();
+            var subnetId = savedSubnet.Entity.Id;
 
             List<string> stringIps = await SubnetController.GenerateIPsAsync(subnetAddress);
-            List<IpAddress> subnets = new List<IpAddress>();
+
+            List<IpAddress> ips = stringIps.Select(stringip => new IpAddress
+            {
+                IpAddressString = stringip,
+                SubnetId = subnetId
+            }).ToList();
 
             foreach (string ip in stringIps)
             {
                 IpAddress ipAddress = new IpAddress
                 {
                     IpAddressString = ip,
+                    SubnetId = subnetId
                 };
-                subnets.Add(ipAddress);
+                ips.Add(ipAddress);
             }
 
-            Subnet subnet = new Subnet
+            try
             {
-                IpAddresses = subnets,
-                FirstIpAddress = subnetAddress.Split('/')[0],
-                SubnetCIDR = subnetAddress.Split('/')[1],
-                Owners = new List<AppUser> { user }
-            };
+                await _appContext.BulkInsertAsync(ips);
 
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
 
-            await _appContext.Subnets.AddAsync(subnet);
-            await _appContext.SaveChangesAsync();
+            }
 
             return true;
         }
