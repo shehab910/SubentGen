@@ -15,7 +15,12 @@ var builder = WebApplication.CreateBuilder(args);
 string connStr = builder.Configuration.GetConnectionString("DefaultConnection");
 
 //Configure Db context
-builder.Services.AddDbContext<AppDbContext>(opt => opt.UseMySql(connStr, new MySqlServerVersion(new Version(5, 7, 44))));
+builder.Services.AddDbContext<AppDbContext>(opt => opt.UseMySql(
+    connStr,
+    new MySqlServerVersion(new Version(5, 7, 44)))
+        .EnableSensitiveDataLogging() // Optional, enables logging of parameter values
+        //.LogTo(Console.WriteLine, LogLevel.Information)
+);
 
 //builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<AppDbContext>();
 
